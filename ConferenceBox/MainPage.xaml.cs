@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConferenceBox.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,10 @@ namespace ConferenceBox
         public MainPage()
         {
             this.InitializeComponent();
+
+            this.connection = new Connection();
         }
+
+        public Connection connection { get; set; }
     }
 }
