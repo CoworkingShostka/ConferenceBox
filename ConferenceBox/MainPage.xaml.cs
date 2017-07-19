@@ -28,6 +28,7 @@ namespace ConferenceBox
             this.InitializeComponent();
 
             this.connection = new Connection();
+
         }
 
         public Connection connection { get; set; }

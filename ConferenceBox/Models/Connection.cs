@@ -28,12 +28,14 @@ namespace ConferenceBox.Models
             get { return _People; }
             set { SetProperty(ref _People, value); }
         }
-       
+
+        string connStr = "server=shostka.mysql.ukraine.com.ua;user=shostka_test;database=shostka_test;port=3306;password=12345678;SslMode=None;";
+
         public async Task ConnectAsync()
         {
 
-            string connStr = "server=shostka.mysql.ukraine.com.ua;user=shostka_test;database=shostka_test;port=3306;password=12345678;SslMode=None;";
-                //"server=shostka.mysql.ukraine.com.ua;user=shostka_test;database=shostka_test;port=3306;password=12345678;SslMode=None;";
+            //string connStr = "server=shostka.mysql.ukraine.com.ua;user=shostka_test;database=shostka_test;port=3306;password=12345678;SslMode=None;";
+            //"server=shostka.mysql.ukraine.com.ua;user=shostka_test;database=shostka_test;port=3306;password=12345678;SslMode=None;";
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -49,14 +51,21 @@ namespace ConferenceBox.Models
                     {
                         while (rdr.Read())
                         {
-                            People.Add(new Person { surname = rdr.GetString("surname"), id = rdr.GetInt32("id"), name = rdr.GetString("name"),
-                                email = rdr.GetString("email"), note = rdr.GetString("note"), patronymic = rdr.GetString("patronymic") });
+                            People.Add(new Person
+                            {
+                                surname = rdr.GetString("surname"),
+                                id = rdr.GetInt32("id"),
+                                name = rdr.GetString("name"),
+                                email = rdr.GetString("email"),
+                                note = rdr.GetString("note"),
+                                patronymic = rdr.GetString("patronymic")
+                            });
                         }
 
                         rdr.Close();
                     }
 
-                    
+
                     conn.Close();
                 }
 
@@ -65,26 +74,61 @@ namespace ConferenceBox.Models
                 //    Debug.WriteLine(rdr[0] + " -- " + rdr[1]);
                 //}
                 //
-                
+
             }
-                catch (Exception ex)
-                {
-                    var dialog = new MessageDialog(ex.ToString());
-                    await dialog.ShowAsync();
+            catch (Exception ex)
+            {
+                var dialog = new MessageDialog(ex.ToString());
+                await dialog.ShowAsync();
 
-                    //Debug.WriteLine(ex.ToString());
-                }
+                //Debug.WriteLine(ex.ToString());
+            }
 
-            
+
             Debug.WriteLine("Done.");
         }
 
+
         public async void OnSelectionChanged(object sender, ItemClickEventArgs args)
         {
-            var person = (Person)args.ClickedItem;
+            try
+            {
+                var person = (Person)args.ClickedItem;
 
-            var dialog = new MessageDialog(person.name + "\n" + person.surname);
-            await dialog.ShowAsync();
+                var item = People.FirstOrDefault(i => i.id == person.id);
+                if (item != null)
+                {
+                    item.note = "Check";
+                }
+
+                using (MySqlConnection conn = new MySqlConnection(connStr))
+                {
+                    Debug.WriteLine("Connecting to MySQL...");
+                    conn.Open();
+
+                    string sql = "UPDATE participant SET note='Check' WHERE id=" + item.id;
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                    cmd.ExecuteNonQuery(); 
+
+                    conn.Close();
+                    Debug.WriteLine("Done.");
+                }
+
+                
+
+                var dialog = new MessageDialog(item.name + "\n" + item.surname + "\n" + item.note);
+                await dialog.ShowAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                var dialogEx = new MessageDialog(ex.ToString());
+                await dialogEx.ShowAsync();
+
+                //Debug.WriteLine(ex.ToString());
+            }
+            
         }
     }
 }

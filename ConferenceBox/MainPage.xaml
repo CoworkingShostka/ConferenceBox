@@ -33,10 +33,10 @@
                                 Height="150" 
                                 BorderBrush="Black" 
                                 BorderThickness="1">
-                        <TextBlock Text="{x:Bind id, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center"  />
-                        <TextBlock Text="{x:Bind surname, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center" />
-                        <TextBlock Text="{x:Bind name, Mode=OneWay}" FontSize="12" HorizontalAlignment="Center" />
-                        <TextBlock Text="{x:Bind note, Mode=OneWay}" FontSize="12" HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind id, Mode=TwoWay}" FontSize="18" HorizontalAlignment="Center"  />
+                        <TextBlock Text="{x:Bind surname, Mode=TwoWay}" FontSize="18" HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind name, Mode=TwoWay}" FontSize="12" HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind note, Mode=TwoWay}" FontSize="12" HorizontalAlignment="Center" />
                     </StackPanel>
 
                 </DataTemplate>
