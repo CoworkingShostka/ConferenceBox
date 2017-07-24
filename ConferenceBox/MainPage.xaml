@@ -7,19 +7,73 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <local:ScenarioBindingConverter x:Key="ScenarioConverter"></local:ScenarioBindingConverter>
+    </Page.Resources>
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            
         </Grid.RowDefinitions>
 
         <Rectangle Fill="{ThemeResource SystemAccentColor}" />
         <TextBlock Text="Conferens Box" FontSize="36" HorizontalAlignment="Center" Margin="10"/>
 
+        <SplitView x:Name="Splitter" IsPaneOpen="True" Grid.Row="1" DisplayMode="Inline">
+            <SplitView.Pane>
+                <RelativePanel Margin="10,0,0,0">
+                    <TextBlock x:Name="SampleTitle" Text="Список конференцій" TextWrapping="Wrap" Margin="0,10,0,0"/>
+                    <ListBox x:Name="ScenarioControl"  ItemsSource="{x:Bind conferences.scenarios}"
+                             SelectionChanged="{x:Bind conferences.OnSelectionChanged}"
+                             SelectionMode="Single" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0"
+                             VerticalAlignment="Top" RelativePanel.Below="SampleTitle" Margin="0,10,0,0" RelativePanel.Above="FooterPanel">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="local:Scenario">
+                                <TextBlock Text="{Binding Converter={StaticResource ScenarioConverter}, Mode=OneWay}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel x:Name="FooterPanel" RelativePanel.AlignBottomWithPanel="True">
+                        
+                    </StackPanel>
+                </RelativePanel>
+            </SplitView.Pane>
+        </SplitView>
+
+        <!--<ListView x:Name="ScenarioControl" SelectionMode="Single" HorizontalAlignment="Left"
+                              VerticalAlignment="Top" RelativePanel.Above="FooterPanel"
+                              ItemsSource="{x:Bind conferences.scenarios}"
+                              RelativePanel.Below="SampleTitle">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:Scenario">
+                    <TextBlock Text="{Binding Converter={StaticResource ScenarioConverter}, Mode=OneWay}" 
+                                           TextWrapping="Wrap" Margin="0,10,0,0" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
+
+        <!--SelectionChanged="ScenarioControl_SelectionChanged"-->
+        <!--<ListBox x:Name="ScenarioControl" 
+                             SelectionMode="Single" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0"
+                             VerticalAlignment="Top" RelativePanel.Below="SampleTitle" Margin="0,10,0,0" RelativePanel.Above="FooterPanel">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="local:Scenario">
+                    <TextBlock Text="{Binding Converter={StaticResource ScenarioConverter}, Mode=OneWay}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>-->
+
+        <!--<ListBox.ItemTemplate>
+            <DataTemplate x:DataType="local:Scenario">
+                <TextBlock Text="{x:Bind Name, Mode=TwoWay}" />
+            </DataTemplate>
+        </ListBox.ItemTemplate>-->
+
         <!--ItemClick="{x:Bind connection.OnSelectionChanged}"-->
         <!--ItemsSource="{x:Bind connect.People}"-->
-        <GridView Grid.Row="1" 
+        <!--<GridView Grid.Row="1" 
                   ItemsSource="{x:Bind connection.People}"
                   Margin="10" 
                   ScrollViewer.VerticalScrollBarVisibility="Auto" 
@@ -43,6 +97,6 @@
 
             </GridView.ItemTemplate>
 
-        </GridView>
+        </GridView>-->
     </Grid>
 </Page>

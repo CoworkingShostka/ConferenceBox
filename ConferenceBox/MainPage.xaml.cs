@@ -23,14 +23,46 @@ namespace ConferenceBox
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public static MainPage Current;
+
         public MainPage()
         {
             this.InitializeComponent();
 
-            this.connection = new Connection();
+            Current = this;
+
+
+            this.conferences = new ConferenceList();
+
+            
+            //this.connection = new Connection();
 
         }
 
-        public Connection connection { get; set; }
+        public ConferenceList conferences { get; set; }
+        //public Connection connection { get; set; }
+
+        //public List<Scenario> Scenarios
+        //{
+        //    get { return this.scenarios; }
+        //}
+
+        //protected override void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    // Populate the scenario list from the SampleConfiguration.cs file
+        //    ScenarioControl.ItemsSource = conferences.scenarios;
+        //    //if (Window.Current.Bounds.Width < 640)
+        //    //{
+        //    //    ScenarioControl.SelectedIndex = -1;
+        //    //}
+        //    //else
+        //    //{
+        //    //    ScenarioControl.SelectedIndex = 0;
+        //    //}
+        //}
+
+
     }
+
+
 }
