@@ -20,10 +20,17 @@ namespace ConferenceBox.Models
             provider = System.Text.CodePagesEncodingProvider.Instance;
             Encoding.RegisterProvider(provider);
 
+
             ConnectAsync();
         }
 
         //public const string FEATURE_NAME = "Список конференцій";
+        private bool _IsPaneOpen = true;
+        public bool IsPaneOpen
+        {
+            get { return _IsPaneOpen; }
+            set { SetProperty(ref _IsPaneOpen, value); }
+        }
 
         private ObservableCollection<Scenario> _scenarios = new ObservableCollection<Scenario>();
         public ObservableCollection<Scenario> scenarios
@@ -97,12 +104,17 @@ namespace ConferenceBox.Models
 
         public async void OnSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
+
             ListBox scenarioListBox = sender as ListBox;
             Scenario s = scenarioListBox.SelectedItem as Scenario;
             if (s != null)
             {
-
+                await MainPage.Current.connection.ConnectAsync(s.id.ToString());
+                //UserList.Current.connection = new Connection(s.id);
+                //MainPage.Current.connection = new Connection(s.id);
+                IsPaneOpen = false;
             }
+
         }
     }
 

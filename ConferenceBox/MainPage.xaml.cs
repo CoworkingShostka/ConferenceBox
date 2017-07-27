@@ -34,13 +34,21 @@ namespace ConferenceBox
 
             this.conferences = new ConferenceList();
 
-            
-            //this.connection = new Connection();
+            //ScanarioFrame.Navigate(typeof(UserList));
+            this.connection = new Connection();
 
         }
 
         public ConferenceList conferences { get; set; }
-        //public Connection connection { get; set; }
+
+        public Connection connection { get; set; }
+
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            Splitter.IsPaneOpen = !Splitter.IsPaneOpen;
+        }
+
+        
 
         //public List<Scenario> Scenarios
         //{

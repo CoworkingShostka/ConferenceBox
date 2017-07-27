@@ -10,41 +10,47 @@ namespace ConferenceBox.Models
     {
         
         private int _id;
-        private string _surname;
-        private string _name;
-        private string _patronymic;
+        private string _firstname;
+        private string _lastname;
         private string _email;
-        private string _note;
+        private string _barcode;
+        private string _notes;
+        private int _isVisited;
 
         public int id
         {
             get { return _id; }
             set { SetProperty(ref _id, value); }
         }
-        public string surname
+        public string firstname
         {
-            get { return _surname; }
-            set { SetProperty(ref _surname, value); }
+            get { return _firstname; }
+            set { SetProperty(ref _firstname, value); }
         }
-        public string name
+        public string lastname
         {
-            get { return _name; }
-            set { SetProperty(ref _name, value); }
+            get { return _lastname; }
+            set { SetProperty(ref _lastname, value); }
         }
-        public string patronymic
+        public string barcode
         {
-            get { return _patronymic; }
-            set { SetProperty(ref _patronymic, value); }
+            get { return _barcode; }
+            set { SetProperty(ref _barcode, value); }
         }
         public string email
         {
             get { return _email; }
             set { SetProperty(ref _email, value); }
         }
-        public string note
+        public string notes
         {
-            get { return _note; }
-            set { SetProperty(ref _note, value); }
+            get { return _notes; }
+            set { SetProperty(ref _notes, value); }
+        }
+        public int isVisited
+        {
+            get { return _isVisited; }
+            set { SetProperty(ref _isVisited, value); }
         }
     }
 }

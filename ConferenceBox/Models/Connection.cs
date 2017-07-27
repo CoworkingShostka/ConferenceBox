@@ -13,13 +13,23 @@ namespace ConferenceBox.Models
 {
     public class Connection : NotificationBase
     {
+        //public Connection(int _id)
+        //{
+        //    System.Text.EncodingProvider provider;
+        //    provider = System.Text.CodePagesEncodingProvider.Instance;
+        //    Encoding.RegisterProvider(provider);
+        //    People.Clear();
+
+        //    //ConnectAsync(_id.ToString());
+        //    test();
+        //}
+
         public Connection()
         {
             System.Text.EncodingProvider provider;
             provider = System.Text.CodePagesEncodingProvider.Instance;
             Encoding.RegisterProvider(provider);
-
-            ConnectAsync();
+            People.Clear();
         }
 
         private static ObservableCollection<Person> _People = new ObservableCollection<Person>();
@@ -29,38 +39,55 @@ namespace ConferenceBox.Models
             set { SetProperty(ref _People, value); }
         }
 
-        string connStr = "server=shostka.mysql.ukraine.com.ua;user=shostka_test;database=shostka_test;port=3306;password=12345678;SslMode=None;";
 
-        public async Task ConnectAsync()
+
+        public async Task ConnectAsync(string _id)
         {
+            People.Clear();
+
+            string connStr = "server=shostka.mysql.ukraine.com.ua;user=shostka_conf;database=shostka_conf;port=3306;password=Cpu1234Pro;SslMode=None;";
+
 
             //string connStr = "server=shostka.mysql.ukraine.com.ua;user=shostka_test;database=shostka_test;port=3306;password=12345678;SslMode=None;";
             //"server=shostka.mysql.ukraine.com.ua;user=shostka_test;database=shostka_test;port=3306;password=12345678;SslMode=None;";
+
             try
             {
+
                 using (MySqlConnection conn = new MySqlConnection(connStr))
                 {
-                    Debug.WriteLine("Connecting to MySQL...");
+                    Debug.WriteLine("Connecting to MySQL conference...");
                     conn.Open();
 
-                    string sql = "SELECT * FROM participant";
+                    string sql = "SELECT * FROM users WHERE id IN (SELECT user_id FROM conference_" + _id + ")";
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
-
 
                     using (MySqlDataReader rdr = cmd.ExecuteReader())
                     {
-                        while (rdr.Read())
+                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                         {
-                            People.Add(new Person
+                            while (rdr.Read())
                             {
-                                surname = rdr.GetString("surname"),
-                                id = rdr.GetInt32("id"),
-                                name = rdr.GetString("name"),
-                                email = rdr.GetString("email"),
-                                note = rdr.GetString("note"),
-                                patronymic = rdr.GetString("patronymic")
-                            });
-                        }
+                                People.Add(new Person
+                                {
+                                    id = rdr.GetInt32("id"),
+                                    firstname = rdr.GetString("firstname"),
+                                    lastname = rdr.GetString("lastname"),
+                                    email = rdr.GetString("email"),
+                                    barcode = rdr.GetString("barcode"),
+                                    notes = rdr.GetString("notes"),
+                                    isVisited = 0
+
+                                    //surname = rdr.GetString("surname"),
+                                    //id = rdr.GetInt32("id"),
+                                    //name = rdr.GetString("name"),
+                                    //email = rdr.GetString("email"),
+                                    //note = rdr.GetString("note"),
+                                    //patronymic = rdr.GetString("patronymic")
+                                });
+                            }
+                        });
+
 
                         rdr.Close();
                     }
@@ -98,26 +125,26 @@ namespace ConferenceBox.Models
                 var item = People.FirstOrDefault(i => i.id == person.id);
                 if (item != null)
                 {
-                    item.note = "Check";
+                    item.isVisited = 1;
                 }
 
-                using (MySqlConnection conn = new MySqlConnection(connStr))
-                {
-                    Debug.WriteLine("Connecting to MySQL...");
-                    conn.Open();
+                //using (MySqlConnection conn = new MySqlConnection(connStr))
+                //{
+                //    Debug.WriteLine("Connecting to MySQL...");
+                //    conn.Open();
 
-                    string sql = "UPDATE participant SET note='Check' WHERE id=" + item.id;
-                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                //    string sql = "UPDATE participant SET note='Check' WHERE id=" + item.id;
+                //    MySqlCommand cmd = new MySqlCommand(sql, conn);
 
-                    cmd.ExecuteNonQuery(); 
+                //    cmd.ExecuteNonQuery(); 
 
-                    conn.Close();
-                    Debug.WriteLine("Done.");
-                }
+                //    conn.Close();
+                //    Debug.WriteLine("Done.");
+                //}
 
-                
 
-                var dialog = new MessageDialog(item.name + "\n" + item.surname + "\n" + item.note);
+
+                var dialog = new MessageDialog(item.isVisited + "\n" + item.firstname + "\n" + item.lastname);
                 await dialog.ShowAsync();
             }
             catch (Exception ex)
@@ -128,6 +155,45 @@ namespace ConferenceBox.Models
 
                 //Debug.WriteLine(ex.ToString());
             }
+
+        }
+
+        public void test()
+        {
+            
+                People.Add(new Person
+                {
+                    id = 1,
+                    firstname = "firstname1",
+                    lastname = "lastname1",
+                    email = "email1",
+                    barcode = "barcode1",
+                    notes = "notes1",
+                    isVisited = 0
+                });
+
+                People.Add(new Person
+                {
+                    id = 2,
+                    firstname = "firstname2",
+                    lastname = "lastname2",
+                    email = "email2",
+                    barcode = "barcode2",
+                    notes = "notes2",
+                    isVisited = 0
+                });
+
+                People.Add(new Person
+                {
+                    id = 3,
+                    firstname = "firstname3",
+                    lastname = "lastname3",
+                    email = "email3",
+                    barcode = "barcode3",
+                    notes = "notes3",
+                    isVisited = 0
+                });
+            
             
         }
     }
