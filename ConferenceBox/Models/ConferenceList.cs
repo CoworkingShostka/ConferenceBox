@@ -19,11 +19,16 @@ namespace ConferenceBox.Models
             System.Text.EncodingProvider provider;
             provider = System.Text.CodePagesEncodingProvider.Instance;
             Encoding.RegisterProvider(provider);
-
-
+            
             ConnectAsync();
         }
 
+        private string _TitleText = "ConferenceBox";
+        public string TitleText
+        {
+            get { return _TitleText; }
+            set { SetProperty(ref _TitleText, value); }
+        }
         //public const string FEATURE_NAME = "Список конференцій";
         private bool _IsPaneOpen = true;
         public bool IsPaneOpen
@@ -113,6 +118,7 @@ namespace ConferenceBox.Models
                 //UserList.Current.connection = new Connection(s.id);
                 //MainPage.Current.connection = new Connection(s.id);
                 IsPaneOpen = false;
+                TitleText = s.Name;
             }
 
         }

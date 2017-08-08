@@ -17,11 +17,16 @@
             <RowDefinition Height="*" />
             
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            
+        </Grid.ColumnDefinitions>
 
-        <Rectangle Fill="{ThemeResource SystemAccentColor}" />
+        <Rectangle Fill="{ThemeResource SystemAccentColor}" Grid.ColumnSpan="2"/>
         
 
-        <SplitView x:Name="Splitter" IsPaneOpen="{x:Bind conferences.IsPaneOpen, Mode=TwoWay}" Grid.Row="1" DisplayMode="Inline">
+        <SplitView x:Name="Splitter" IsPaneOpen="{x:Bind conferences.IsPaneOpen, Mode=TwoWay}" Grid.Row="1" Grid.ColumnSpan="2" DisplayMode="Inline">
             <SplitView.Pane>
                 <RelativePanel Margin="10,0,0,0">
                     <TextBlock x:Name="SampleTitle" Text="Список конференцій:" TextWrapping="Wrap" Margin="0,10,0,0"/>
@@ -102,19 +107,30 @@
             </DataTemplate>
         </ListBox.ItemTemplate>-->
 
-        <StackPanel x:Name="HeaderPanel" Orientation="Horizontal">
-            <Border Background="{ThemeResource SystemAccentColor}" Grid.Row="0">
+        <Border Background="{ThemeResource SystemAccentColor}" VerticalAlignment="Center">
+            <ToggleButton Style="{StaticResource SymbolButton}" Click="ToggleButton_Click"
+                           Foreground="{ThemeResource ApplicationForegroundThemeBrush}" >
+                <ToggleButton.Content>
+                    <FontIcon x:Name="Hamburger" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;"  />
+                </ToggleButton.Content>
+            </ToggleButton>
+        </Border>
+        
+        <TextBlock x:Name="TitelTextBlock" Text="{x:Bind conferences.TitleText, Mode=OneWay}" TextWrapping="Wrap" FontSize="18" Margin="10" Grid.Column="1"/>
+
+        <!--<StackPanel x:Name="HeaderPanel" Orientation="Horizontal" VerticalAlignment="Stretch">
+            <Border Background="{ThemeResource SystemAccentColor}" >
                 <ToggleButton Style="{StaticResource SymbolButton}" Click="ToggleButton_Click"
-                          VerticalAlignment="Top" Foreground="{ThemeResource ApplicationForegroundThemeBrush}">
+                           Foreground="{ThemeResource ApplicationForegroundThemeBrush}" >
                     <ToggleButton.Content>
-                        <FontIcon x:Name="Hamburger" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" Margin="0,10,0,0"/>
+                        <FontIcon x:Name="Hamburger" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;"  />
                     </ToggleButton.Content>
                 </ToggleButton>
             </Border>
 
-            <TextBlock Text="Conferens Box" FontSize="30" HorizontalAlignment="Stretch" Margin="10"/>
-        </StackPanel>
-        
+            <TextBlock x:Name="TitelTextBlock" Text="{x:Bind conferences.TitleText, Mode=OneWay}" TextWrapping="Wrap" FontSize="18" Margin="10"/>
+        </StackPanel>-->
+        <!--{x:Bind conferences.TitleText, Mode=OneWay}-->
         
         
         <!--ItemClick="{x:Bind connection.OnSelectionChanged}"-->

@@ -59,13 +59,15 @@ namespace ConferenceBox.Models
                     Debug.WriteLine("Connecting to MySQL conference...");
                     conn.Open();
 
-                    string sql = "SELECT * FROM users WHERE id IN (SELECT user_id FROM conference_" + _id + ")";
+                    string sql = "SELECT users.*, conference_" +_id+ ".is_visited FROM conference_" +_id+ " LEFT JOIN users ON conference_" +_id+ ".user_id = users.id";
+                    
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    //cmd.Parameters.AddWithValue("@id",_id);
 
                     using (MySqlDataReader rdr = cmd.ExecuteReader())
                     {
-                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                        {
+                        //await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        //{
                             while (rdr.Read())
                             {
                                 People.Add(new Person
@@ -76,7 +78,7 @@ namespace ConferenceBox.Models
                                     email = rdr.GetString("email"),
                                     barcode = rdr.GetString("barcode"),
                                     notes = rdr.GetString("notes"),
-                                    isVisited = 0
+                                    isVisited = rdr.GetInt32("is_visited")
 
                                     //surname = rdr.GetString("surname"),
                                     //id = rdr.GetInt32("id"),
@@ -86,7 +88,7 @@ namespace ConferenceBox.Models
                                     //patronymic = rdr.GetString("patronymic")
                                 });
                             }
-                        });
+                        //});
 
 
                         rdr.Close();
